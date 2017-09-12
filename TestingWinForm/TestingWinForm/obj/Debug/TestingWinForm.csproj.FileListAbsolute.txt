@@ -1,0 +1,9 @@
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\bin\Debug\TestingWinForm.exe.config
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\bin\Debug\TestingWinForm.exe
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\bin\Debug\TestingWinForm.pdb
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.csprojResolveAssemblyReference.cache
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.Form1.resources
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.Properties.Resources.resources
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.csproj.GenerateResource.Cache
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.exe
+c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.pdb
