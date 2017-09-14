@@ -7,12 +7,15 @@ using System.Windows.Forms;
 
 namespace TestingWinForm.SudokuUtil
 {
-    class SudokuBoard
+    public class SudokuBoard
     {
         int MaxTextLen = 0;
         Panel tbpanel2;
         int cellwidth = 0, cellheight = 0;
         int MainDimension = 0;
+        SudokuMath.SudokuMathUtils mathutils = new SudokuMath.SudokuMathUtils();
+        SudokuUtil.SudokuPattern patternutil = new SudokuUtil.SudokuPattern();
+        PatternChecker patternchecker = new PatternChecker();
 
         public SudokuBoard(Panel _tbpanel, int _cellwidth, int _cellheight)
         {
@@ -36,8 +39,36 @@ namespace TestingWinForm.SudokuUtil
                     SudokuUI.SudokuTextBox tb = createTextbox(a, b);
                     tbpanel2.Controls.Add(tb);
                     tb.Location = new System.Drawing.Point((b - 1) * cellwidth, (a - 1) * cellheight);
-                   
+                    string cellstate = patternutil.getCellStateinMagicBox(a, b, gridrootcount);
+                    tb.setCellMagicBoxGrid(cellstate,2);
+                    tb.TextChanged += Tb_TextChanged;
+                    if (a == 1) //top sides
+                        tb.setTopBorderSize(4);
+                    if (b == 1) //left sides
+                        tb.setLeftBorderSize(4);
+                    if (b == gridrootcount) //right sides
+                        tb.setRightBorderSize(4);
+                    if (a == gridrootcount) //bottom sides
+                        tb.setBottomBorderSize(4);
                 }
+            }
+        }
+        
+
+        private void Tb_TextChanged(object sender, EventArgs e)
+        {
+            int parsedValue;
+            if (!int.TryParse((sender as TextBox).Text, out parsedValue))
+            {
+                (sender as TextBox).Text = "";
+            }
+            else
+            {
+                if(parsedValue > MainDimension)
+                    (sender as TextBox).Text = MainDimension+"";
+                else if(parsedValue < 1)
+                    (sender as TextBox).Text = "";
+
             }
         }
 
@@ -70,14 +101,15 @@ namespace TestingWinForm.SudokuUtil
             tb.Width = cellwidth;
             tb.Height = cellheight;
             tb.Font = new System.Drawing.Font("Century Gothic", 10F,
-                    System.Drawing.FontStyle.Italic,
+                    System.Drawing.FontStyle.Bold,
                     System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            tb.SetDefaultFont(new System.Drawing.Font("Century Gothic", 10F,
+                    System.Drawing.FontStyle.Bold,
+                    System.Drawing.GraphicsUnit.Point, ((byte)(0))));
             tb.Margin = new Padding(0);
 
-            tb.SetSudokuBorderStyle(SudokuUI.SudokuTBStyle.BORDER_RIGHT, 1);
-            tb.SetBorderColor(System.Drawing.Color.DarkBlue);
-            //else
-            //    tb.Margin = new Padding(0);
+            tb.SetSudokuBorderStyle(new SudokuUI.SudokuBorderStyle(false, false, false, false),System.Drawing.Color.BurlyWood, 1);
+            
             tb.TabIndex = 0;
 
             return tb;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,13 @@ namespace TestingWinForm.SudokuUtil
         {
             _Dimension = _dimension;
         }
+
+        public SudokuPattern()
+        {
+            //just nothing
+        }
+
+
 
         public int[,] generateNumberPattern()
         {
@@ -65,6 +73,126 @@ namespace TestingWinForm.SudokuUtil
             
             return _Pattern;
         }
+
+
+
+
+        public int[,] generateRandomBlanksForSudokuBoardTypeMB(int[,] pattern, int filledpermagicbox)
+        {
+            int dimension = pattern.GetLength(0);
+            int groupdim = mathutils.getGroupDim(dimension);
+            int[,] randomblanks = new int[dimension, dimension];
+            randomblanks = Fill2DArrayWithDefaultValue(randomblanks, 0);
+
+            int IndexRow = 0, IndexCol = 0;
+            int MaxIndexRow = groupdim, MaxIndexCol = groupdim;
+
+            
+
+            for(int gridrow = 1; gridrow <= groupdim; gridrow++)
+            {
+                IndexRow = (gridrow - 1) * groupdim;
+                MaxIndexRow = gridrow * groupdim;
+                for (int gridcol = 1; gridcol <= groupdim; gridcol++)
+                {
+                    IndexCol = (gridcol - 1) * groupdim;
+                    MaxIndexCol = gridcol * groupdim;
+
+                    int[] CellNumOfFilled = generateNonRepititiveRandomNumbers(filledpermagicbox, 1, dimension);
+                    foreach (int aa in CellNumOfFilled)
+                        Console.Write(aa + ",");
+                    Console.WriteLine();
+                    for (int row = IndexRow; row < MaxIndexRow; row++)
+                    {
+                        for (int col = IndexCol; col < MaxIndexCol; col++)
+                        {
+
+                            for (int a = 0; a < CellNumOfFilled.Length; a++)
+                            {
+                                int rowRand = (CellNumOfFilled[a]-1)/ groupdim;
+                                int colRand = (CellNumOfFilled[a] - 1) % groupdim;
+                                rowRand = rowRand + IndexRow;
+                                colRand = colRand + IndexCol;
+
+                                Console.WriteLine("["+ rowRand+","+colRand+"]");
+                                if (rowRand == row && colRand == col)
+                                {
+                                    randomblanks[row, col] = pattern[row, col];
+                                  //  break;
+                                }
+                            }
+                        }
+                    }
+
+                    Console.WriteLine();
+
+
+                }
+            }
+
+
+
+
+            
+
+
+            return randomblanks;
+        }
+
+
+        public int[,] Fill2DArrayWithDefaultValue(int[,] arr, int defval)
+        {
+            for(int a = 0; a < arr.GetLength(0); a++)
+            {
+                for (int b = 0; b < arr.GetLength(1); b++)
+                {
+                    arr[a, b] = defval;
+                }
+            }
+
+            return arr;
+        }
+
+
+
+
+        int[] generateNonRepititiveRandomNumbers(int gencounts, int min, int max)
+        {
+            int[] gens = new int[gencounts];
+
+            int currgen = 0;
+
+            while (true)
+            {
+                int num = mathutils.randomNumber(min, max);
+                bool exists = false;
+                for(int a = 0; a < gencounts; a++)
+                {
+                    if(gens[a] == num)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    gens[currgen] = num;
+                    currgen++;
+                }
+                if(currgen >= gencounts)
+                {
+                    break;
+                }
+            }
+
+            return gens;
+        }
+
+
+
+
+
+
 
 
         private int[] getDefaultGroupingIndeces(int groupDim)
@@ -293,10 +421,117 @@ namespace TestingWinForm.SudokuUtil
 
             return glineset;
         }
+
+        
+
+
+        public string getCellStateinMagicBox(int row, int col, int MaxGridDimension)
+        {
+            CellStates_MagicBox states = new CellStates_MagicBox();
+            string cellstate = states.NONE;
+            int groupdim = mathutils.getGroupDim(MaxGridDimension);
+            bool left = false, right = false, top = false, bottom = false;
+
+            for (int a = 1; a <= MaxGridDimension; a++)
+            {
+                for (int b = 1; b <= MaxGridDimension; b++)
+                {
+
+                    if(row == a && col == b)
+                    {
+                        if (a == 1) //top sides
+                            top = true;
+                        if (b == 1) //left sides
+                            left = true;
+                        if (b == MaxGridDimension) //right sides
+                            right = true;
+                        if (a == MaxGridDimension) //bottom sides
+                            bottom = true;
+                        if ((b-1)% groupdim == 0) //left side of a magic box
+                        {
+                            left = true;
+                        }
+                        if (b % groupdim == 0) //right side of a magic box
+                        {
+                            right = true;
+                        }
+                        if ((a - 1) % groupdim == 0) //left side of a magic box
+                        {
+                            top = true;
+                        }
+                        if (a % groupdim == 0) //right side of a magic box
+                        {
+                            bottom = true;
+                        }
+                        //tb.setLeftBorderSize(2);
+                    }
+                }
+            }
+
+            if (left && top && right && bottom)
+                cellstate = states.ALL_SIDE;
+            else if (left && !top && !right && !bottom)
+                cellstate = states.LEFT_SIDE;
+            else if (!left && top && !right && !bottom)
+                cellstate = states.TOP_SIDE;
+            else if (!left && !top && right && !bottom)
+                cellstate = states.RIGHT_SIDE;
+            else if (!left && !top && !right && bottom)
+                cellstate = states.BOTTOM_SIDE;
+            else if (left && top && !right && !bottom)
+                cellstate = states.TOP_LEFT_CORNER;
+            else if (!left && top && right && !bottom)
+                cellstate = states.TOP_RIGHT_CORNER;
+            else if (left && !top && !right && bottom)
+                cellstate = states.BOTTOM_LEFT_CORNER;
+            else if (!left && !top && right && bottom)
+                cellstate = states.BOTTOM_RIGHT_CORNER;
+            else
+                cellstate = states.NONE;
+
+
+
+
+
+
+
+
+            return cellstate;
+        }
+
+
+
+
+
+
         
        
 
     }
+
+    public class CellStates_MagicBox
+    {
+        public readonly string TOP_LEFT_CORNER = "TOP_LEFT_CORNER";
+        public readonly string TOP_RIGHT_CORNER = "TOP_RIGHT_CORNER";
+        public readonly string BOTTOM_LEFT_CORNER = "BOTTOM_LEFT_CORNER";
+        public readonly string BOTTOM_RIGHT_CORNER = "BOTTOM_RIGHT_CORNER";
+        
+
+        public readonly string TOP_SIDE = "TOP_SIDE";
+        public readonly string BOTTOM_SIDE = "BOTTOM_SIDE";
+        public readonly string LEFT_SIDE = "LEFT_SIDE";
+        public readonly string RIGHT_SIDE = "RIGHT_SIDE";
+        public readonly string ALL_SIDE = "ALL_SIDE";
+        public readonly string NONE = "NONE";
+    }
+
+
+    class CellIndexPairs
+    {
+        public int Row = -1;
+        public int Column = -1;
+    }
+
 
     class GroupLineSet
     {

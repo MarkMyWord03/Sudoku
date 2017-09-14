@@ -7,3 +7,12 @@ c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWi
 c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.csproj.GenerateResource.Cache
 c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.exe
 c:\users\pb7n0070\documents\visual studio 2015\Projects\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.pdb
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\bin\Debug\TestingWinForm.exe.config
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.exe
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.pdb
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\bin\Debug\TestingWinForm.exe
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\bin\Debug\TestingWinForm.pdb
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.Form1.resources
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.Properties.Resources.resources
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.csproj.GenerateResource.Cache
+C:\Users\pb7n0070\Documents\Visual Studio 2015\Projects\Sudoku\TestingWinForm\TestingWinForm\obj\Debug\TestingWinForm.csprojResolveAssemblyReference.cache
