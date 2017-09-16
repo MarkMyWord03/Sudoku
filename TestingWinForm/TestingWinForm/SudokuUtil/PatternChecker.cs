@@ -15,13 +15,54 @@ namespace TestingWinForm.SudokuUtil
         public bool checkoutSudokuBoardForErrors(Panel _panel, int dimension)
         {
             bool Correct = false;
-            Task<bool> task = Task<bool>.Factory.StartNew(() =>
+            SudokuboardPanel = _panel;
+            checkoutsboardInit(dimension);
+            int groupdim = mathutils.getGroupDim(dimension);
+            Task<bool> task1 = Task<bool>.Factory.StartNew(() =>
             {
                 try
                 {
-                    bool output = checkoutsboard(_panel, dimension);
-                    Correct = output;
-                    return output;
+                    checkoutMagicBox(_panel, dimension, Correct, groupdim);
+                    return Correct;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            });
+
+            Task<bool> task2 = Task<bool>.Factory.StartNew(() =>
+            {
+                try
+                {
+                    checkoutCellsHorizontallyFunction(_panel, dimension, Correct, groupdim);
+                    return Correct;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            });
+
+            Task<bool> task3 = Task<bool>.Factory.StartNew(() =>
+            {
+                try
+                {
+                    checkoutCellsVerticallyFunction(_panel, dimension, Correct, groupdim);
+                    return Correct;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            });
+
+            Task<bool> task4 = Task<bool>.Factory.StartNew(() =>
+            {
+                try
+                {
+                    checkoutBlankCellsFunction(_panel, dimension, Correct, groupdim);
+                    return Correct;
                 }
                 catch (Exception e)
                 {
@@ -34,16 +75,17 @@ namespace TestingWinForm.SudokuUtil
         }
 
 
-        private bool checkoutsboard(Panel _panel, int dimension)
+        private void checkoutsboardInit(int dimension)
         {
-            SudokuboardPanel = _panel;
-            bool Correct = true;
-            int groupdim = mathutils.getGroupDim(dimension);
-
             ResetFontOfAllTextBox(dimension);
             ResetForeColorOfAllTextBox(dimension);
+        }
 
-            #region Magic Box Checking Algo
+
+        #region Magic Box Checking Function
+        public void checkoutMagicBox(Panel _panel, int dimension, bool Corrector, int groupdim)
+        {
+            
             for (int rowspergroup = 1; rowspergroup <= dimension; rowspergroup += groupdim)
             {
                 for (int colspergroup = 1; colspergroup <= dimension; colspergroup += groupdim)
@@ -58,25 +100,15 @@ namespace TestingWinForm.SudokuUtil
                         }
                     }
 
-                    Correct = CheckUniquenessInThisTBList(tbspergroup, Correct);
+                    Corrector = CheckUniquenessInThisTBList(tbspergroup, Corrector);
                 }
             }
-            #endregion
+        }
+        #endregion
 
-            #region Check Cells Horizontally
-            //check errors horizontally
-            for (int row = 1; row <= dimension; row++)
-            {
-                List<SudokuUI.SudokuTextBox> tbcells = new List<SudokuUI.SudokuTextBox>();
-                for (int col = 1; col <= dimension; col++)
-                {
-                    tbcells.Add(FindSudokuTextBox("tb{" + row + "," + col + "}", _panel));
-                }
-                Correct = CheckUniquenessInThisTBList(tbcells, Correct);
-            }
-            #endregion
-
-            #region Check Cells Vertically
+        #region Check Cells Vertically
+        public void checkoutCellsVerticallyFunction(Panel _panel, int dimension, bool Corrector, int groupdim)
+        {
             //check errors vertically
             for (int col = 1; col <= dimension; col++)
             {
@@ -85,11 +117,30 @@ namespace TestingWinForm.SudokuUtil
                 {
                     tbcells.Add(FindSudokuTextBox("tb{" + row + "," + col + "}", _panel));
                 }
-                Correct = CheckUniquenessInThisTBList(tbcells, Correct);
+                Corrector = CheckUniquenessInThisTBList(tbcells, Corrector);
             }
-            #endregion
+        }
+        #endregion
 
-            #region Check for Blanks
+        #region Check Cells Horizontally Function
+        public void checkoutCellsHorizontallyFunction(Panel _panel, int dimension, bool Corrector, int groupdim)
+        {
+            //check errors horizontally
+            for (int row = 1; row <= dimension; row++)
+            {
+                List<SudokuUI.SudokuTextBox> tbcells = new List<SudokuUI.SudokuTextBox>();
+                for (int col = 1; col <= dimension; col++)
+                {
+                    tbcells.Add(FindSudokuTextBox("tb{" + row + "," + col + "}", _panel));
+                }
+                Corrector = CheckUniquenessInThisTBList(tbcells, Corrector);
+            }
+        }
+        #endregion
+
+        #region Check for Blanks Function
+        public void checkoutBlankCellsFunction(Panel _panel, int dimension, bool Corrector, int groupdim)
+        {
             //check for blanks
             for (int col = 1; col <= dimension; col++)
             {
@@ -99,7 +150,7 @@ namespace TestingWinForm.SudokuUtil
                     SudokuUI.SudokuTextBox tb = FindSudokuTextBox("tb{" + row + "," + col + "}", _panel);
                     if (tb.Text.Trim() == "")
                     {
-                        Correct = false;
+                        Corrector = false;
                         stop = true;
                         break;
                     }
@@ -107,10 +158,10 @@ namespace TestingWinForm.SudokuUtil
                 if (stop)
                     break;
             }
-            #endregion
-
-            return Correct;
         }
+        #endregion
+
+
 
         public void PrintPattern(int[,] pattern)
         {
